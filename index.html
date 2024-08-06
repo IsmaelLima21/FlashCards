@@ -10,6 +10,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <!-- SortableJS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+<!-- html2canvas para Captura -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
 <!--Google Font-->
 <link href='https://fonts.googleapis.com/css?family=Montserrat|Sofia|Lato|Raleway' rel='stylesheet'>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -22,7 +24,7 @@
 
 <style>
   body {
-    font-family: 'Raleway';
+    font-family: -apple-system, BlinkMacSystemFont, 'Raleway', Roboto, Helvetica, Arial, sans-serif;
     font-size: 20px;
     background-color: #f5f5f5;
     margin: 0;
@@ -34,7 +36,8 @@
   .left-container {
     width: 380px;
     background-color: #ffffff;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.22);
+    /*box-shadow: 2px 0 10px rgba(0,0,0,0.4);*/
     overflow-y: auto;
     padding: 20px;
   }
@@ -58,16 +61,16 @@
     font-size: 20px;
   }
   .categories {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     height: 160px;
     overflow-y: auto;
   }
   .category {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     cursor: pointer;
-    padding: 5px;
+    padding: 2px;
     border-radius: 8px;
     transition: background-color 1.0s;
   }
@@ -75,9 +78,9 @@
     background-color: #f0f0f0;
   }
   .category-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
+    width: 22px;
+    height: 22px;
+    margin-right: 12px;
     background-color: #e0e0e0;
     border-radius: 50%;
     display: flex;
@@ -87,7 +90,7 @@
     color: #fff;
   }
   .category-name {
-    font-size: 16px;
+    font-size: 15px;
     flex-grow: 1;
   }
   
@@ -189,7 +192,7 @@
     border: 1px solid #dedede;
     border-radius: 8px;
   }
-  textarea {
+ textarea {
     resize: vertical;
     min-height: 100px;
   }
@@ -217,7 +220,7 @@
   .color-option {
     width: 20px;
     height: 20px;
-    border-radius: 50%;
+    border-radius: 8%;
     display: inline-block;
     margin: 0 5px;
     cursor: pointer;
@@ -226,9 +229,12 @@
   .miniature-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
     height: 450px;
-    margin-top: 20px;
+    margin-top: 10px;
+    background-color: #f1f1f1;
+    padding: 16px 24px;
+    border-radius: 6px;
     overflow-y: auto;
   }
   .miniature-card {
@@ -236,7 +242,7 @@
     height: 130px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    padding: 5px;
+    padding: 6px;
     font-size: 12px;
     overflow: hidden;
     cursor: pointer;
@@ -252,6 +258,8 @@
     justify-content: space-between;
   }
   .miniature-actions button {
+    color: #000;
+    border-radius: 6px;
     padding: 2px 5px;
     font-size: 8px;
   }
@@ -259,7 +267,7 @@
 .save-indicator {
     position: absolute;
     top: 20px;
-    top: 20px; /* Cambiado de right a left */
+    left: 40px; /* Cambiado de right a left */
     padding: 10px;
     background-color: #ff1f4b;
     color: white;
@@ -286,20 +294,20 @@
     overflow-y: auto;
   }
   .edit-card-content {
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255,255,255,0.5);
     /*background-color: #fefefe;*/
     margin: 7% auto;
-    padding: 30px;
+    padding: 24px;
     border: 1px solid #ff2954;
     width: 60%;
     max-width: 480px;
     border-radius: 12px;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);	
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);	
     box-shadow: 0 4px 8px rgba(0, 0, 0,0.25); 
   }
   .close-modal {
-    color: #aaa;
+    color: #3b3b3b;
     float: right;
     font-size: 28px;
     font-weight: normal;
@@ -311,6 +319,55 @@
     text-decoration: none;
     cursor: pointer;
   }
+
+
+/* Estilos para el acordeón */
+  .accordion {
+            margin-top: 4px;
+        }
+        .accordion-item {
+            /*border: 1px solid #ff2954;*/
+            border: 1px solid rgba(255,255,255,0.65);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .accordion-header {
+            /*border: 1px solid #ff2954;*/
+            background-color: rgba(255,255,255,0.6);
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.5s ease;
+        }
+        .accordion-header:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 1.2s ease-out;
+            background-color: rgba(255,255,255,0.03);
+        }
+        .accordion-content.active {
+            max-height: auto; /* Ajusta este valor según el contenido máximo esperado */
+            transition: max-height 1.2s ease-in;
+        }
+
+
+        .accordion-header::after {
+            content: '\02795'; /* Unicode character for "plus" sign (+) */
+            font-size: 13px;
+            font-weight: normal;
+            color: #ff2954;
+            float: right;
+            margin-left: 5px;
+        }
+        .accordion-header.active::after {
+            content: "\2796"; /* Unicode character for "minus" sign (-) */
+            color: #ff2954;
+        }
+
+
   .new-card-miniature {
     display: flex;
     align-items: center;
@@ -320,11 +377,11 @@
     color: #ff2954;
     border: 1px solid #ff2954;
     background-color: #fff;
-    box-shadow: 0 2px 6px rgba(255, 41, 84,0.1); 
+    box-shadow: 0 2px 6px rgba(255, 41, 84,0.39); 
   }
 
 
-/* Estilos del Modal */
+/* Estilos del Modal About */
 .modal {
     display: none; /* Oculto por defecto */
     position: fixed; 
@@ -341,18 +398,18 @@
 
 .modal-content {
     background: rgba(255, 255, 255, 0.70);
-    font-size: 16px;
+    font-size: 15px;
     font-weight: normal;
     margin: 10% auto;
     padding: 45px;
     width: 620px; 
-    height: 500px;
+    height: auto;
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);    
-    border-radius: 18px;
-    border: 1px solid #ff2954;
-    /*border: 1px solid rgba(255, 255, 255, 0.18);*/    
+    border-radius: 14px;
+    border: 1px solid rgb(255, 255, 255, 0.79);
+    /*border: 1px solid rgb(255, 41, 84, 1.0);*/    
     /*overflow-y: auto;  Scroll si el contenido es demasiado grande */
 }
 
@@ -400,10 +457,6 @@
     outline: none;
     box-shadow: 0 0 5px rgba(23, 162, 184, 0.5);
 }
-
-
-
-
     
     .copy {    
     padding: 6px 15px;
@@ -415,23 +468,16 @@
 
 
 .custom-toast {
-  visibility: hidden; /* Oculto por defecto */
-  min-width: 250px; /* Ancho mínimo */
-  margin-right: 20px; /* Espaciado desde el borde derecho */
-  background-color: #fff; /* Fondo oscuro */
-  font-size: 14px;
-  color: #666; /* Texto blanco */
-  text-align: center; /* Alineación del texto */
-  border: 1px solid #e8e8e8;
-  border-radius: 8px; /* Bordes redondeados */
-  position: fixed; /* Fijo en la pantalla */
-  z-index: 1000; /* Enfrente de otros elementos */
-  right: 20px; /* Distancia desde el borde derecho */
-  bottom: 90px; /* Distancia desde la parte inferior */
-  padding: 20px; /* Espaciado interno */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Sombra */
-  transition: visibility 0.6s, opacity 0.6s linear; /* Transición suave */
-  opacity: 0; /* Invisible por defecto */
+  position: fixed;
+    top: 20px;
+    left: 420px;
+    padding: 10px;
+    background-color: #ff1f4b;
+    color: white;
+    border-radius: 7px;
+    opacity: 0;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    transition: opacity 2.0s ease;
 }
 
 
@@ -450,7 +496,6 @@
 }
 
 
-
 .flashcard {
   perspective: 1000px;
 }
@@ -464,7 +509,6 @@
 .flashcard.flipped .flashcard-inner {
   transform: rotateY(180deg);
 }
-
 
 
 .flashcard {
@@ -484,49 +528,274 @@
 }
 
 
+/* Estilos CSS adicionales (puedes agregarlos a tu archivo CSS)*/
+
+.reorder-indicator {
+  position: absolute;
+  top: 20px;
+  left: 420px; /* Cambiado de right a left */
+  background-color: #ff1f4b;  // Un color verde para diferenciar del indicador de guardado general
+  color: white;
+  padding: 10px;
+  border-radius: 7px;  
+  z-index: 1000;
+  opacity: 0;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);  
+  transition: opacity 0.6s ease-in-out;
+}
+
+.reorder-indicator.show {
+  opacity: 1;
+}
+
+
+/*  .save-indicator {
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    transition: opacity 2.0s ease; 
+*/
+
+
+/* TIMER STYLES */
+
+.TimerModal {
+    position: fixed;
+    bottom: -320px;
+    right: 20px;
+    width: 160px;
+    height: 320px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transition: bottom 1.0s ease-in-out;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .TimerModal.show {
+    bottom: 40px; /* Ajusta este valor para mover la caja más arriba */
+}
+  .timer-container {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-wrap: nowrap; 
+    height: 100%;
+    box-sizing: border-box;
+  }
+  .timer-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: conic-gradient(#ff3b7f 270deg, #f0f0f0 270deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    position: relative;
+  }
+  .timer-circle::before {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: white;
+  }
+  .timer-display {
+    font-size: 18px;
+    font-weight: 200;
+    color: #9e9e9e;
+    position: relative;
+    z-index: 1;
+  }
+  .timer-unit {
+    font-size: 12px;
+    color: #888;
+    position: relative;
+    z-index: 1;
+  }
+
+.timer-buttons, .preset-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2px;
+  }
+  .timer-button, .preset-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 22%;
+    border: 1px solid #e8e8e8;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: background-color 0.3s;
+  }
+  .timer-button {
+    background-color: #ff3b7f;
+    color: white;
+  }
+  .timer-button:hover {
+    background-color: #fff;
+    color: #ff3b7f; 
+  }
+  .preset-button {
+    background-color: #fff;
+    color: #666;
+  }
+  .preset-button:hover {
+    background-color: #ff3b7f;
+    color: #fff;
+  }
+  .custom-time-input {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 26px;
+  }
+ .custom-time-input input {
+    width: 45%;
+    padding: 2px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .show-TimerModal-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff3b7f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .show-TimerModal-button:hover {
+    background-color: #e91e63;
+  }
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    background-color: #ff1f4b;
+    color: white;
+    border-radius: 7px;
+    opacity: 0;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    transition: opacity 2.0s ease;
+  }
+  .notification.show {
+    opacity: 1;
+  }
+
+ 
+/* TIMER STYLE END */
+
+
+/* ESTILOS DEL TOOLTIP*/
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip {
+    visibility: hidden;
+    width: 150px;
+    background-color: #fff;
+    color: #666;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 6px 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: background-color 0.3s;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Posición del tooltip */
+    left: 50%;
+    margin-left: -75px; /* Centra el tooltip */
+    opacity: 0;
+    transition: opacity 1.0s;
+}
+
+.tooltip-container:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+/* FIN DE ESTILO TOOLTIP*/
+
+
+
+
+.SaveCategorienotification {
+    position: fixed;
+    top: 20px;
+    left: 420px;
+    padding: 10px;
+    background-color: #ff1f4b;
+    color: white;
+    border-radius: 7px;
+    opacity: 0;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    transition: opacity 2.0s ease;
+  }
+
 
 
   .color-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 5px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
     margin-top: 10px;
+    margin-left: 28px;
   }
 
   .color-option {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
     display: inline-block;
     cursor: pointer;
     border: 1px solid #c4c4c4;
     /*border: 1px solid transparent;*/
-    transition: border-color 0.5s ease;
+    transition: border-color 0.2s ease;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);	
   }
 
   .color-option:hover, .color-option.selected {
-    border-color: #bababa;
+    /*border-color: #6e6e6e;*/
+    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.45);	
   }
 
   .color-option[data-color="gradient-1"] {
-    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    background: linear-gradient(135deg, #c7a9e9, #a1c4fd);
   }
 
   .color-option[data-color="gradient-2"] {
-    background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+    background: linear-gradient(135deg, #fccb90, #d57eeb);
   }
 
   .color-option[data-color="gradient-3"] {
-    background: linear-gradient(to right, #d4fc79, #96e6a1);
+    background: linear-gradient(135deg, #d4fc79, #96e6a1);
   }
 
   .color-option[data-color="gradient-4"] {
-    background: linear-gradient(to right, #ffecd2, #fcb69f);
+    background: linear-gradient(135deg, #aa9cfc, #fc9ce7);
   }
 
   .color-option[data-color="gradient-5"] {
-    background: linear-gradient(to right, #84fab0, #8fd3f4);
+    background: linear-gradient(135deg, #f794a4, #fdd6bd);
   }
 
   .color-option[data-color="paper-1"] {
@@ -554,6 +823,9 @@
     background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="25" fill="none" stroke="%23eee" stroke-width="0.5"/></svg>');
   }
 
+
+
+
 </style>
 </head>
 <body>
@@ -579,22 +851,24 @@
   
   <div class="right-container">
 
-    <div class="flashcard" id="flashcard">
-      <div class="flashcard-inner">
+<!-- La tarjetita que quieres capturar -->
+
+<div class="flashcard" id="flashcard">
+    <div class="flashcard-inner">
         <div class="flashcard-front">
-          <div class="flashcard-title" id="frontCardTitle">Flashcard Title</div>
-          <div class="flashcard-description" id="frontText">This is a brief description or question for the flashcard. Tap to see the answer!</div>
-          <img id="frontCardImage" class="card-image" src="" alt="" style="display: none; max-width: 100%; max-height: 50%;">
-          <audio id="frontCardAudio" controls style="display: none; margin-top: 10px;"></audio>
+            <div class="flashcard-title" id="frontCardTitle">Flashcard Title</div>
+            <div class="flashcard-description" id="frontText">This is a brief description or question for the flashcard. Tap to see the answer!</div>
+            <img id="frontCardImage" class="card-image" src="" alt="" style="display: none; max-width: 100%; max-height: 50%;">
         </div>
+        <!-- La parte de atrás de la tarjeta -->
         <div class="flashcard-back">
           <div class="flashcard-title" id="backCardTitle">Answer Title</div>
           <div class="flashcard-description" id="backText"></div>
           <img id="backCardImage" class="card-image" src="" alt="" style="display: none; max-width: 100%; max-height: 50%;">
-          <audio id="backCardAudio" controls style="display: none; margin-top: 10px;"></audio>
-        </div>
+           </div>
       </div>
     </div>
+
 <div class="save-indicator" id="saveIndicator">Stack Saved!</div>
     <div class="flashcard-controls">
       <button class="nav-button" id="prevBtn">&#8592;</button>
@@ -607,123 +881,248 @@
 	<div class="reorder-controls">
       <!-- <button id="moveUpBtn">Move Up</button>-->
       <!-- <button id="moveDownBtn">Move Down</button>-->
-<!-- Botón para abrir el Modal de About -->
+	
+	<!-- Botón para abrir el Modal de About -->
 <button id="openAboutModal" class="Open">About</button>
 
+        <!-- Botón Guardar Imagen -->
+
+<div class="tooltip-container">
+    <button id="saveFrontAsJPG"><i class="fa fa-download"></i></button>
+    <span class="tooltip">Guardar Frente como Imagen</span>
+</div>
+
+<div class="tooltip-container">
+    <button id="saveBackAsJPG"><i class="fa fa-download"></i></button>
+    <span class="tooltip">Guardar Revez como Imagen</span>
+</div>
+
+	
+	<!-- Botón para abrir el TIMER MODAL -->
+ <button class="Open" id="showTimerModalButton">Show Timer</button>
+
+	<!-- NOTIFICATION DIV TIMER -->
+<div class="notification" id="notification">Timer Started</div>
+
+
     </div>
 
   </div>
 
-  
+<!-- TIMER MODAL -->
 
-<div id="editCardModal" class="edit-card-modal">
-    <div class="edit-card-content">
-      <span class="close-modal">&times;</span>
-      <h2 id="editCardTitle">Edit Card</h2>
-           
-      <select id="frontTitleFont">
-	<option value="Lato">Lato</option>
-	<option value="Montserrat">Montserrat</option>
-	<option value="Raleway">Raleway</option>
-	<option value="Sofia">Sofia</option>
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Courier New">Courier New</option>
-        <option value="Georgia">Georgia</option>
-      </select>
-      <input type="text" id="editFrontTitle" placeholder="Front Card Title">      
-      <select id="frontTextFont">
-	<option value="Lato">Lato</option>
-	<option value="Montserrat">Montserrat</option>
-	<option value="Raleway">Raleway</option>
-	<option value="Sofia">Sofia</option>
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Courier New">Courier New</option>
-        <option value="Georgia">Georgia</option>
-      </select>
-      <textarea id="editFrontText" placeholder="Front side text"></textarea>
-      <input type="file" id="editFrontImage" accept="image/*">
-      <button class="remove-media-btn" id="removeFrontImage">Remove Front Image</button>
-      <input type="file" id="editFrontAudio" accept="audio/*">
-      <button class="remove-media-btn" id="removeFrontAudio">Remove Front Audio</button>
-      <h2 id="editCardTitle">Back Side</h2> 
-      <select id="backTitleFont">
-	<option value="Lato">Lato</option>
-	<option value="Montserrat">Montserrat</option>
-	<option value="Raleway">Raleway</option>
-	<option value="Sofia">Sofia</option>
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Courier New">Courier New</option>
-        <option value="Georgia">Georgia</option>
-      </select>
-      <input type="text" id="editBackTitle" placeholder="Back Card Title">
-      <select id="backTextFont">
-	<option value="Lato">Lato</option>
-	<option value="Montserrat">Montserrat</option>
-	<option value="Raleway">Raleway</option>
-	<option value="Sofia">Sofia</option>
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Courier New">Courier New</option>
-        <option value="Georgia">Georgia</option>
-      </select>
-      <textarea id="editBackText" placeholder="Back side text"></textarea>
-      <input type="file" id="editBackImage" accept="image/*">
-      <button class="remove-media-btn" id="removeBackImage">Remove Back Image</button>
-      <input type="file" id="editBackAudio" accept="audio/*">
-      <button class="remove-media-btn" id="removeBackAudio">Remove Back Audio</button>
-      <h2 id="editCardTitle">Pick a Color for your Card</h2> 
-      <div class="color-grid">
-        <div class="color-option" style="background-color: #FFFFFF;" data-color="#FFFFFF"></div>
-        <div class="color-option" style="background-color: #FFB3BA;" data-color="#FFB3BA"></div>
-        <div class="color-option" style="background-color: #BAFFC9;" data-color="#BAFFC9"></div>
-        <div class="color-option" style="background-color: #BAE1FF;" data-color="#BAE1FF"></div>
-        <div class="color-option" style="background-color: #FFFFBA;" data-color="#FFFFBA"></div>
-        <div class="color-option" style="background-color: #FFDFBA;" data-color="#FFDFBA"></div>
-        <div class="color-option" style="background-color: #E0BBE4;" data-color="#E0BBE4"></div>
-        <div class="color-option" style="background-color: #D4F0F0;" data-color="#D4F0F0"></div>
-        <div class="color-option" style="background-color: #FFC6FF;" data-color="#FFC6FF"></div>
-        <div class="color-option" style="background-color: #FFDAB9;" data-color="#FFDAB9"></div>
-        <div class="color-option" style="background-color: #B0E0E6;" data-color="#B0E0E6"></div>
-        <div class="color-option" style="background-color: #F0E68C;" data-color="#F0E68C"></div>
-        <div class="color-option" data-color="gradient-1"></div>
-        <div class="color-option" data-color="gradient-2"></div>
-        <div class="color-option" data-color="gradient-3"></div>
-        <div class="color-option" data-color="gradient-4"></div>
-        <div class="color-option" data-color="gradient-5"></div>
-        <div class="color-option" data-color="paper-1"></div>
-        <div class="color-option" data-color="paper-2"></div>
-        <div class="color-option" data-color="paper-3"></div>
-        <div class="color-option" data-color="paper-4"></div>
-        <div class="color-option" data-color="paper-5"></div>
-        <div class="color-option" style="background-color: #98FB98;" data-color="#98FB98"></div>
-        <div class="color-option" style="background-color: #DDA0DD;" data-color="#DDA0DD"></div>
-        <div class="color-option" style="background-color: #F0FFF0;" data-color="#F0FFF0"></div>
-        <div class="color-option" style="background-color: #F5F5DC;" data-color="#F5F5DC"></div>
-        <div class="color-option" style="background-color: #FFF0F5;" data-color="#FFF0F5"></div>
-        <div class="color-option" style="background-color: #E6E6FA;" data-color="#E6E6FA"></div>
+<div class="TimerModal" id="TimerModal">
+    <div class="timer-container">
+      <div class="timer-circle">
+        <div class="timer-display" id="timer">27<span class="timer-unit">sec</span></div>
       </div>
-      <button id="saveEditBtn">Save Changes</button>
+      <div class="custom-time-input">
+        <input type="number" id="minutesInput" placeholder="Min" min="0" max="59">
+        <input type="number" id="secondsInput" placeholder="Sec" min="0" max="59">
+      </div>
+      <div class="preset-buttons">
+        <button class="preset-button" data-time="300">5m</button>
+        <button class="preset-button" data-time="600">10m</button>
+        <button class="preset-button" data-time="900">15m</button>
+      </div>
+      <div class="preset-buttons">
+        <button class="preset-button" data-time="1200">20m</button>
+        <button class="preset-button" data-time="1800">30m</button>
+        <button class="preset-button" data-time="3600">1h</button>
+      </div>
+      <div class="timer-buttons">
+        <button id="startButton" class="timer-button">&#9658;</button>
+        <button id="pauseResumeButton" class="timer-button">&#10074;&#10074;</button>
+        <button id="resetButton" class="timer-button">&#8634;</button>
+      </div>
     </div>
   </div>
+  
+<!-- Modal Edit Card -->
+
+<!-- <button onclick="openEditModal(0)">Open Edit Modal</button> -->
+
+    <div id="editCardModal" class="edit-card-modal">
+        <div class="edit-card-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="editCardTitle">Edit Card</h2>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">Front Side</div>
+                    <div class="accordion-content">
+                        <select id="frontTitleFont">
+                            	<option value="Lato">Lato</option>
+				<option value="Montserrat">Montserrat</option>
+				<option value="Raleway">Raleway</option>
+				<option value="Sofia">Sofia</option>
+                                <option value="Poppins">Poppins</option>
+        			<option value="Arial">Arial</option>
+       				<option value="Verdana">Verdana</option>
+        			<option value="Times New Roman">Times New Roman</option>
+        			<option value="Courier New">Courier New</option>
+        			<option value="Georgia">Georgia</option>
+                        </select>
+                        <input type="text" id="editFrontTitle" placeholder="Front Card Title">      
+                        <select id="frontTextFont">
+                                <option value="Lato">Lato</option>
+				<option value="Montserrat">Montserrat</option>
+				<option value="Raleway">Raleway</option>
+				<option value="Sofia">Sofia</option>
+                                <option value="Poppins">Poppins</option>
+        			<option value="Arial">Arial</option>
+       				<option value="Verdana">Verdana</option>
+        			<option value="Times New Roman">Times New Roman</option>
+        			<option value="Courier New">Courier New</option>
+        			<option value="Georgia">Georgia</option>
+                        </select>
+                        <textarea id="editFrontText" placeholder="Front side text"></textarea>
+                        <input type="file" id="editFrontImage" accept="image/*">
+                        <button class="remove-media-btn" id="removeFrontImage">Remove Front Image</button>
+                        </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">Back Side</div>
+                    <div class="accordion-content">
+                        <select id="backTitleFont">
+                            	<option value="Lato">Lato</option>
+				<option value="Montserrat">Montserrat</option>
+				<option value="Raleway">Raleway</option>
+				<option value="Sofia">Sofia</option>
+                                <option value="Poppins">Poppins</option>
+        			<option value="Arial">Arial</option>
+       				<option value="Verdana">Verdana</option>
+        			<option value="Times New Roman">Times New Roman</option>
+        			<option value="Courier New">Courier New</option>
+        			<option value="Georgia">Georgia</option>
+                        </select>
+                        <input type="text" id="editBackTitle" placeholder="Back Card Title">
+                        <select id="backTextFont">
+                            <option value="Lato">Lato</option>
+				<option value="Montserrat">Montserrat</option>
+				<option value="Raleway">Raleway</option>
+				<option value="Sofia">Sofia</option>
+                                <option value="Poppins">Poppins</option>
+        			<option value="Arial">Arial</option>
+       				<option value="Verdana">Verdana</option>
+        			<option value="Times New Roman">Times New Roman</option>
+        			<option value="Courier New">Courier New</option>
+        			<option value="Georgia">Georgia</option>
+                        </select>
+                        <textarea id="editBackText" placeholder="Back side text"></textarea>
+                        <input type="file" id="editBackImage" accept="image/*">
+                        <button class="remove-media-btn" id="removeBackImage">Remove Back Image</button>
+                        </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">Card Color</div>
+                    <div class="accordion-content">
+                        <div class="color-grid">
+<!-- Blancos / tonos de grises suaves -->
+<div class="color-option" style="background-color: #FFFFFF;" data-color="#FFFFFF"></div>
+<div class="color-option" style="background-color: #FAFAFA;" data-color="#FAFAFA"></div>
+<div class="color-option" style="background-color: #F5F5F5;" data-color="#F5F5F5"></div>
+<div class="color-option" style="background-color: #F0F0F0;" data-color="#F0F0F0"></div>
+<div class="color-option" style="background-color: #EBEBEB;" data-color="#EBEBEB"></div>
+<div class="color-option" style="background-color: #E6E6E6;" data-color="#E6E6E6"></div>
+ 			<!-- Rojos claros -->
+<div class="color-option" style="background-color: #FF8080;" data-color="#FF8080"></div>
+<div class="color-option" style="background-color: #FFADAD;" data-color="#FFADAD"></div>
+<div class="color-option" style="background-color: #FFB7B7;" data-color="#FFB7B7"></div>
+<div class="color-option" style="background-color: #FFC1C1;" data-color="#FFC1C1"></div>
+<div class="color-option" style="background-color: #FFCBCB;" data-color="#FFCBCB"></div>
+<div class="color-option" style="background-color: #FFD5D5;" data-color="#FFD5D5"></div>
+
+<!-- Naranjas claros -->
+<div class="color-option" style="background-color: #FFBA80;" data-color="#FFBA80"></div>
+<div class="color-option" style="background-color: #FFD0AD;" data-color="#FFD0AD"></div>
+<div class="color-option" style="background-color: #FFD6B9;" data-color="#FFD6B9"></div>
+<div class="color-option" style="background-color: #FFDCC5;" data-color="#FFDCC5"></div>
+<div class="color-option" style="background-color: #FFE2D1;" data-color="#FFE2D1"></div>
+<div class="color-option" style="background-color: #FFE8DD;" data-color="#FFE8DD"></div>
+
+<!-- Amarillos claros -->
+<div class="color-option" style="background-color: #FFF280;" data-color="#FFF280"></div>
+<div class="color-option" style="background-color: #FFF5AD;" data-color="#FFF5AD"></div>
+<div class="color-option" style="background-color: #FFF6B7;" data-color="#FFF6B7"></div>
+<div class="color-option" style="background-color: #FFF7C1;" data-color="#FFF7C1"></div>
+<div class="color-option" style="background-color: #FFF8CB;" data-color="#FFF8CB"></div>
+<div class="color-option" style="background-color: #FFF9D5;" data-color="#FFF9D5"></div>
+
+<!-- Verdes claros -->
+<div class="color-option" style="background-color: #BFEA80;" data-color="#BFEA80"></div>
+<div class="color-option" style="background-color: #D4EDAD;" data-color="#D4EDAD"></div>
+<div class="color-option" style="background-color: #DBF0B9;" data-color="#DBF0B9"></div>
+<div class="color-option" style="background-color: #E2F3C5;" data-color="#E2F3C5"></div>
+<div class="color-option" style="background-color: #E9F6D1;" data-color="#E9F6D1"></div>
+<div class="color-option" style="background-color: #F0F9DD;" data-color="#F0F9DD"></div>
+
+<!-- Verdes pastel -->
+<div class="color-option" style="background-color: #99F299;" data-color="#99F299"></div>
+<div class="color-option" style="background-color: #B5F5B5;" data-color="#B5F5B5"></div>
+<div class="color-option" style="background-color: #C1F7C1;" data-color="#C1F7C1"></div>
+<div class="color-option" style="background-color: #CDFACD;" data-color="#CDFACD"></div>
+<div class="color-option" style="background-color: #D9FCD9;" data-color="#D9FCD9"></div>
+<div class="color-option" style="background-color: #E5FEE5;" data-color="#E5FEE5"></div>
+
+<!-- Azules claros -->
+<div class="color-option" style="background-color: #80D5FF;" data-color="#80D5FF"></div>
+<div class="color-option" style="background-color: #ADE5FF;" data-color="#ADE5FF"></div>
+<div class="color-option" style="background-color: #B9E9FF;" data-color="#B9E9FF"></div>
+<div class="color-option" style="background-color: #C5EDFF;" data-color="#C5EDFF"></div>
+<div class="color-option" style="background-color: #D1F1FF;" data-color="#D1F1FF"></div>
+<div class="color-option" style="background-color: #DDF5FF;" data-color="#DDF5FF"></div>
+
+<!-- Azules pastel -->
+<div class="color-option" style="background-color: #99C5FF;" data-color="#99C5FF"></div>
+<div class="color-option" style="background-color: #B5D8FF;" data-color="#B5D8FF"></div>
+<div class="color-option" style="background-color: #C1DEFF;" data-color="#C1DEFF"></div>
+<div class="color-option" style="background-color: #CDE4FF;" data-color="#CDE4FF"></div>
+<div class="color-option" style="background-color: #D9EAFF;" data-color="#D9EAFF"></div>
+<div class="color-option" style="background-color: #E5F0FF;" data-color="#E5F0FF"></div>
+
+<!-- Morados claros -->
+<div class="color-option" style="background-color: #C080FF;" data-color="#C080FF"></div>
+<div class="color-option" style="background-color: #E0D0FF;" data-color="#E0D0FF"></div>
+<div class="color-option" style="background-color: #E5D8FF;" data-color="#E5D8FF"></div>
+<div class="color-option" style="background-color: #EAE0FF;" data-color="#EAE0FF"></div>
+<div class="color-option" style="background-color: #EFE8FF;" data-color="#EFE8FF"></div>
+<div class="color-option" style="background-color: #F4F0FF;" data-color="#F4F0FF"></div>
+
+<!-- Rosas claros -->
+<div class="color-option" style="background-color: #FF80EB;" data-color="#FF80EB"></div>
+<div class="color-option" style="background-color: #FFD0F5;" data-color="#FFD0F5"></div>
+<div class="color-option" style="background-color: #FFD8F7;" data-color="#FFD8F7"></div>
+<div class="color-option" style="background-color: #FFE0F9;" data-color="#FFE0F9"></div>
+<div class="color-option" style="background-color: #FFE8FB;" data-color="#FFE8FB"></div>
+<div class="color-option" style="background-color: #FFF0FD;" data-color="#FFF0FD"></div>
+
+<!-- Variaciones pastel -->
+<div class="color-option" style="background-color: #CCFFED;" data-color="#CCFFED"></div>
+<div class="color-option" style="background-color: #E6FFF2;" data-color="#E6FFF2"></div>
+<div class="color-option" style="background-color: #EBFFF4;" data-color="#EBFFF4"></div>
+<div class="color-option" style="background-color: #F0FFF6;" data-color="#F0FFF6"></div>
+<div class="color-option" style="background-color: #F5FFF8;" data-color="#F5FFF8"></div>
+<div class="color-option" style="background-color: #FAFFFA;" data-color="#FAFFFA"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="saveEditBtn">Save Changes</button>
+        </div>
+    </div>
+
+
 
 
 
 <!-- Toast personalizado -->
 <div id="customToast" class="custom-toast">
-  <span id="toastMessage">Mensaje del toast aquí.</span>
-
-<span class="toast-close-btn">&times;</span>
-  
+  <span id="toastMessage">Mensaje del toast aquí.</span>  
 </div>
-
-
 
 
 
@@ -736,15 +1135,15 @@
 	<h2>About this Application</h2>
         <p>Hello and Welcome, My name is Ismael, the Creator of this application that allows you to manage and organize your flashcards efficiently.</p> 
 
-<p>You can create, edit, save, delete, and sort your cards easily. The application also offers features like image and audio attachments.</p>
+<p>You can create, edit, save, delete, and sort your cards easily. The application also offers features like image attachments.</p>
 
- <p>Your cards are saved and stored locally in your computer, that means nobody else can see them unless you share the JSON file</p>
+ <p>Your cards are saved and stored locally in your computer, that means nobody else can see them, unless you share the JSON file.</p>
 
         <p>Customize the cards with different colors and fonts, and save your progress for later use. The application is designed to be intuitive, minimalistic, and user-friendly, I hope you enjoy it. ❤️</p>
 
 <p>If you like our app, consider supporting the project through PayPal or Cafecito. Your donation makes a difference.</p> 
 
-<p>v 01.12</p> 
+<p>v 01.24</p> 
     
       <div class="modal-footer">
 
@@ -771,7 +1170,16 @@
 
     let currentStack = 'default';
     let currentCardIndex = 0;
-    let selectedColor = "#FFB3BA";
+    let selectedColor = "#FFFFFF";
+
+    let countdown;
+    let totalTime;
+    let timeLeft;
+    let isPaused = false;
+    let isActive = false;
+    
+// Nueva variable global para controlar la edición de categorías
+    let isEditingCategoryName = false;
 
     const flashcardElement = document.getElementById('flashcard');
     const frontCardTitleElement = document.getElementById('frontCardTitle');
@@ -813,14 +1221,196 @@
     const moveDownBtn = document.getElementById('moveDownBtn');
     const removeFrontImageBtn = document.getElementById('removeFrontImage');
     const removeBackImageBtn = document.getElementById('removeBackImage');
-    const removeFrontAudioBtn = document.getElementById('removeFrontAudio');
-    const removeBackAudioBtn = document.getElementById('removeBackAudio');
     const frontTitleFontSelect = document.getElementById('frontTitleFont');
     const frontTextFontSelect = document.getElementById('frontTextFont');
     const backTitleFontSelect = document.getElementById('backTitleFont');
     const backTextFontSelect = document.getElementById('backTextFont');
 
+    const timerDisplay = document.getElementById('timer');
+    const startButton = document.getElementById('startButton');
+    const pauseResumeButton = document.getElementById('pauseResumeButton');
+    const resetButton = document.getElementById('resetButton');
+    const timerCircle = document.querySelector('.timer-circle');
+    const presetButtons = document.querySelectorAll('.preset-button');
+    const minutesInput = document.getElementById('minutesInput');
+    const secondsInput = document.getElementById('secondsInput');
+    const TimerModal = document.getElementById('TimerModal');
+    const showTimerModalButton = document.getElementById('showTimerModalButton');
+    const notification = document.getElementById('notification');
+
+
+// --> TIMER MODAL
+
+
+    startButton.addEventListener('click', startTimer);
+    pauseResumeButton.addEventListener('click', togglePause);
+    resetButton.addEventListener('click', resetTimer);
+    presetButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        totalTime = parseInt(button.dataset.time);
+        timeLeft = totalTime;
+        updateTimerDisplay(timeLeft);
+        updateCircleProgress(timeLeft);
+      });
+    });
+
+    minutesInput.addEventListener('change', updateCustomTime);
+    secondsInput.addEventListener('change', updateCustomTime);
+
+    showTimerModalButton.addEventListener('click', () => {
+      TimerModal.classList.toggle('show');
+    });
+
+    function updateCustomTime() {
+      const minutes = parseInt(minutesInput.value) || 0;
+      const seconds = parseInt(secondsInput.value) || 0;
+      totalTime = minutes * 60 + seconds;
+      timeLeft = totalTime;
+      updateTimerDisplay(timeLeft);
+      updateCircleProgress(timeLeft);
+    }
+
+    function startTimer() {
+      if (!totalTime) return;
+      clearInterval(countdown);
+      
+      isPaused = false;
+      isActive = true;
+      updateTimerDisplay(timeLeft);
+      updateCircleProgress(timeLeft);
+      pauseResumeButton.innerHTML = "&#10074;&#10074;";
+      TimerModal.classList.add('show');
+      showNotification("Timer Started");
+      
+      countdown = setInterval(() => {
+        if (!isPaused) {
+          timeLeft--;
+          updateTimerDisplay(timeLeft);
+          updateCircleProgress(timeLeft);
+          
+          if (timeLeft <= 0) {
+            clearInterval(countdown);
+            isActive = false;
+            showNotification("Timer Finished!");
+          }
+        }
+      }, 1000);
+    }
+
+function togglePause() {
+      isPaused = !isPaused;
+      pauseResumeButton.innerHTML = isPaused ? "&#9658;" : "&#10074;&#10074;";
+      showNotification(isPaused ? "Timer Paused" : "Timer Resumed");
+    }
+
+    function resetTimer() {
+      clearInterval(countdown);
+      timeLeft = totalTime;
+      isPaused = false;
+      isActive = false;
+      updateTimerDisplay(timeLeft);
+      updateCircleProgress(timeLeft);
+      pauseResumeButton.innerHTML = "&#10074;&#10074;";
+      showNotification("Timer Reset");
+    }
+
+    function updateTimerDisplay(seconds) {
+      const displayMinutes = Math.floor(seconds / 60);
+      const displaySeconds = seconds % 60;
+      const formattedTime = `${padZero(displayMinutes)}:${padZero(displaySeconds)}`;
+      timerDisplay.innerHTML = `${formattedTime}<span class="timer-unit">sec</span>`;
+    }
+
+    function padZero(num) {
+      return num.toString().padStart(2, '0');
+    }
+
+    function updateCircleProgress(timeLeft) {
+      const progress = (timeLeft / totalTime) * 360;
+      timerCircle.style.background = `conic-gradient(#ff3b7f ${360 - progress}deg, #f0f0f0 ${360 - progress}deg)`;
+    }
+
+    function showNotification(message) {
+      notification.textContent = message;
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 2000);
+    }
+    
+
+
+
+
+// -->Capturar Imagen
+
+document.getElementById('saveFrontAsJPG').addEventListener('click', function() {
+    console.log("Botón de guardar como JPG fue clickeado.");
+
+    // Selecciona el frente de la tarjeta  
+    const cardSide = document.querySelector('.flashcard-front'); // Selecciona el div que contiene el frente
+    if (cardSide) {
+        console.log("Elemento a capturar encontrado:", cardSide);
+
+        html2canvas(cardSide).then(function(canvas) {
+            console.log("Canvas creado exitosamente.");
+
+            const imgData = canvas.toDataURL('image/jpeg');
+            console.log("Imagen convertida a formato JPG.");
+
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = 'tarjeta-frente.jpg';
+            console.log("Enlace para descargar la imagen creado.");
+
+            link.click();
+            console.log("Simulación de clic en el enlace realizada, la descarga debería comenzar.");
+        }).catch(function(error) {
+            console.error("Error al crear el canvas:", error);
+        });
+    } else {
+        console.error("El elemento .flashcard-front no fue encontrado.");
+    }
+});
+
+
+document.getElementById('saveBackAsJPG').addEventListener('click', function() {
+    console.log("Botón de guardar como JPG fue clickeado.");
+
+    // Selecciona el frente de la tarjeta  
+    const cardSide = document.querySelector('.flashcard-back'); // Selecciona el div que contiene el frente
+    if (cardSide) {
+        console.log("Elemento a capturar encontrado:", cardSide);
+
+        html2canvas(cardSide).then(function(canvas) {
+            console.log("Canvas creado exitosamente.");
+
+            const imgData = canvas.toDataURL('image/jpeg');
+            console.log("Imagen convertida a formato JPG.");
+
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = 'tarjeta-frente.jpg';
+            console.log("Enlace para descargar la imagen creado.");
+
+            link.click();
+            console.log("Simulación de clic en el enlace realizada, la descarga debería comenzar.");
+        }).catch(function(error) {
+            console.error("Error al crear el canvas:", error);
+        });
+    } else {
+        console.error("El elemento .flashcard-front no fue encontrado.");
+    }
+});
+
+
+
+
+
+
 // --> Animaciones Working
+
+// --> La funcion Update Card es la que se encarga de mostrar el contenido de las tarjetitas
 
 function updateCard() {
     if (flashcardStacks[currentStack] && flashcardStacks[currentStack].length > 0) {
@@ -839,8 +1429,22 @@ function updateCard() {
             backTextElement.textContent = currentCard.backText;
             flashcardElement.classList.remove('flipped');
             
+            // Aquí es donde se aplica el color específico de la tarjeta seleccionada
+        if (currentCard.color.startsWith('#')) {
+            // Color sólido
             document.querySelector('.flashcard-front').style.backgroundColor = currentCard.color;
             document.querySelector('.flashcard-back').style.backgroundColor = currentCard.color;
+        } else if (currentCard.color.startsWith('gradient')) {
+            // Gradiente
+            const gradientStyle = window.getComputedStyle(document.querySelector(`[data-color="${currentCard.color}"]`)).backgroundImage;
+            document.querySelector('.flashcard-front').style.backgroundImage = gradientStyle;
+            document.querySelector('.flashcard-back').style.backgroundImage = gradientStyle;
+        } else if (currentCard.color.startsWith('paper')) {
+            // Textura
+            const paperStyle = window.getComputedStyle(document.querySelector(`[data-color="${currentCard.color}"]`)).cssText;
+            document.querySelector('.flashcard-front').style.cssText = paperStyle;
+            document.querySelector('.flashcard-back').style.cssText = paperStyle;
+        }
 
             frontCardTitleElement.style.fontFamily = currentCard.frontTitleFont;
             frontTextElement.style.fontFamily = currentCard.frontTextFont;
@@ -861,20 +1465,7 @@ function updateCard() {
                 backCardImage.style.display = 'none';
             }
 
-            if (currentCard.frontAudio) {
-                frontCardAudio.src = currentCard.frontAudio;
-                frontCardAudio.style.display = 'block';
-            } else {
-                frontCardAudio.style.display = 'none';
-            }
-
-            if (currentCard.backAudio) {
-                backCardAudio.src = currentCard.backAudio;
-                backCardAudio.style.display = 'block';
-            } else {
-                backCardAudio.style.display = 'none';
-            }
-
+          
             currentCardNumberElement.textContent = currentCardIndex + 1;
             totalCardsElement.textContent = flashcardStacks[currentStack].length;
 
@@ -891,8 +1482,8 @@ function updateCard() {
         // Si la pila actual está vacía o no existe
         frontCardTitleElement.textContent = "No Cards";
         backCardTitleElement.textContent = "No Cards";
-        frontTextElement.textContent = "This stack is empty. Add some cards!";
-        backTextElement.textContent = "This stack is empty. Add some cards!";
+        frontTextElement.textContent = "This stack is empty. Add some cards!😃 ";
+        backTextElement.textContent = "This stack is empty. Add some cards!😃 ";
         currentCardNumberElement.textContent = "0";
         totalCardsElement.textContent = "0";
     }
@@ -900,10 +1491,6 @@ function updateCard() {
     updateMiniatures();
     currentStackNameElement.textContent = currentStack;
 }
-
-
-
-
 
 
 
@@ -931,14 +1518,30 @@ function updateCard() {
     }
 
 
+// Función para mostrar el indicador de guardado de nuevo orden //CHECK CODE
 
+function showReorderIndicator() {
+  const reorderIndicator = document.createElement('div');
+  reorderIndicator.textContent = 'Changes saved';
+  reorderIndicator.className = 'save-indicator reorder-indicator';
+  document.body.appendChild(reorderIndicator);
 
+  reorderIndicator.classList.add('show');
+  setTimeout(() => {
+    reorderIndicator.classList.remove('show');
+    setTimeout(() => {
+      document.body.removeChild(reorderIndicator);
+    }, 300); // Tiempo para la animación de desvanecimiento
+  }, 2000);
+}
 
 
 // --> Miniature Sorting
 
+
 // Función para actualizar las miniaturas
 function updateMiniatures() {
+  console.log('Actualizando miniaturas');
   miniatureContainer.innerHTML = '';
   
   // Añadir la miniatura "Nueva Tarjeta"
@@ -982,6 +1585,12 @@ function updateMiniatures() {
       miniature.appendChild(actions);
       miniatureContainer.appendChild(miniature);
     });
+
+  } else {
+    // Mostrar un mensaje cuando el stack está vacío
+    const emptyMessage = document.createElement('div');
+    emptyMessage.textContent = 'Stack is empty. Add some cards 😃.';
+    miniatureContainer.appendChild(emptyMessage);  
   }
 
   // Inicializar Sortable después de añadir las miniaturas
@@ -990,11 +1599,14 @@ function updateMiniatures() {
 
 // Función para inicializar Sortable
 function initializeSortable() {
+  console.log('Inicializando Sortable');
   new Sortable(miniatureContainer, {
-    animation: 150,
+    animation: 200,
     ghostClass: 'sortable-ghost',
     filter: '.new-card-miniature', // Evitar que la miniatura "Nueva Tarjeta" sea arrastrable
+    draggable: '.miniature-card:not(.new-card-miniature)', // Hacer arrastrables todas las miniaturas excepto .new-card-miniature
     onEnd: function(evt) {
+      console.log('Orden de miniaturas cambiado');
       saveNewOrder();
     }
   });
@@ -1008,33 +1620,37 @@ function saveNewOrder() {
   // Reordenar el array de tarjetas en el stack actual
   flashcardStacks[currentStack] = newOrder.map(index => flashcardStacks[currentStack][index]);
   
+  console.log('Nuevo orden guardado:', newOrder);
+  
   // Guardar el nuevo orden en localStorage
-  localStorage.setItem('flashcardStacks', JSON.stringify(flashcardStacks));
+  saveToLocalStorage();
 }
 
-// Evento que se ejecuta cuando el DOM está completamente cargado
-document.addEventListener('DOMContentLoaded', function() {
-  loadFlashcardStacks();
-  updateMiniatures();
-});
+// Función para guardar en localStorage
+function saveToLocalStorage() {
+  console.log('Guardando en localStorage...');
+  localStorage.setItem('flashcardStacks', JSON.stringify(flashcardStacks));
+  console.log('Guardado en localStorage');
+  
+  // Mostrar el indicador de reordenamiento (o notificación)
+  showReorderIndicator();
+}
 
 // Función para cargar los stacks de flashcards
 function loadFlashcardStacks() {
   const stacksData = JSON.parse(localStorage.getItem('flashcardStacks'));
   if (stacksData) {
     flashcardStacks = stacksData;
+    console.log('Stacks cargados desde localStorage:', flashcardStacks);
   } else {
     flashcardStacks = {}; // Inicializa vacío si no hay datos
+    console.log('No se encontraron stacks en localStorage. Inicializando vacío.');
   }
 }
 
-// --> Miniature Sorting
 
 
-
-
-
-
+//---------- Miniature Sorting END  <---------
 
 // --> Custom Edit button y Codigo del Toast Working
  
@@ -1054,9 +1670,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Cerrar el toast al hacer clic en el botón de cerrar
-    closeToastBtn.onclick = function() {
-        toast.classList.remove('show');
-    }
+    //closeToastBtn.onclick = function() {
+      //  toast.classList.remove('show');
+    //}
 
     customEditButton.onclick = function() {
         // Verifica si flashcardStacks y currentStack están definidos
@@ -1078,7 +1694,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Verifica si el índice es válido
         if (currentCardIndex < 0 || currentCardIndex >= totalCards) {
-            showToast("Pick a card to edit.");
+            showToast("No card to edit.");
         } else {
             // Abre el modal para el índice de la tarjeta actual
             openEditModal(currentCardIndex);
@@ -1095,15 +1711,18 @@ setTimeout(() => {
 
 // --> Añadir Tarjeta y Crear nuevo Stack Working
 
-    function addCard(frontTitle, backTitle, frontText, backText, frontImage, backImage, frontAudio, backAudio, color) {
-      if (!flashcardStacks[currentStack]) {
+
+function addCard(frontTitle, backTitle, frontText, backText, frontImage, backImage, color) {
+    if (!flashcardStacks[currentStack]) {
         flashcardStacks[currentStack] = [];
-      }
-      flashcardStacks[currentStack].push({ frontTitle, backTitle, frontText, backText, frontImage, backImage, frontAudio, backAudio, color });
-      updateCard();
-      saveToLocalStorage();
-      updateCategories();
     }
+    flashcardStacks[currentStack].push({ frontTitle, backTitle, frontText, backText, frontImage, backImage, color });
+    updateCard();
+    saveToLocalStorage(); // Asegúrate de que esta función guarda correctamente el color.
+    updateCategories();
+}
+
+
 
     function createNewStack(stackName) {
       if (!flashcardStacks[stackName]) {
@@ -1136,49 +1755,6 @@ setTimeout(() => {
       }, 2000);
     }
 
-// --> New Card Modal Working
-
-function openNewCardModal() {
-   editFrontTitleInput.value = '';
-   editBackTitleInput.value = '';
-   editFrontTextInput.value = '';
-   editBackTextInput.value = '';
-   editFrontImageInput.value = '';
-   editBackImageInput.value = '';
-   editFrontAudioInput.value = '';
-   editBackAudioInput.value = '';
-   selectedColor = '#FFFFFF';
-   frontTitleFontSelect.value = 'Raleway';
-   frontTextFontSelect.value = 'Montserrat';
-   backTitleFontSelect.value = 'Raleway';
-   backTextFontSelect.value = 'Montserrat';
-   currentCardIndex = flashcardStacks[currentStack] ? flashcardStacks[currentStack].length : 0;
-   editCardTitle.textContent = "New Card";
-   editCardModal.style.display = 'block';
-   isModalOpen = true; // Establecer a true cuando se abre el modal
-}
-
-function closeNewCardModal() {
-   editCardModal.style.display = 'none';
-   isModalOpen = false; // Establecer a false cuando se cierra el modal
-}
-
-closeModal.addEventListener('click', closeNewCardModal);
-
-saveEditBtn.addEventListener('click', () => {
-   saveEditedCard();
-   closeNewCardModal(); // Asegurarse de que isModalOpen se establezca a false al guardar
-});
-
-window.onclick = function(event) {
-   if (event.target == editCardModal) {
-      closeNewCardModal();
-   }
-};
-
-
-
-
 // --> Guardar Tarjeta Editada Working
 
     function saveEditedCard() {
@@ -1203,9 +1779,7 @@ window.onclick = function(event) {
 
       handleFileInput(editFrontImageInput, 'frontImage', currentCard);
       handleFileInput(editBackImageInput, 'backImage', currentCard);
-      handleFileInput(editFrontAudioInput, 'frontAudio', currentCard);
-      handleFileInput(editBackAudioInput, 'backAudio', currentCard);
-
+      
       updateCard();
       saveToLocalStorage();
       closeEditModal();
@@ -1240,15 +1814,7 @@ document.addEventListener('click', function(event) {
         }
     }
 
-    // Quitar audio frontal
-    if (event.target.id === 'removeFrontAudio') {
-        var card = event.target.closest('.card');
-        var frontAudio = card.querySelector('.front audio');
-        if (frontAudio) {
-            frontAudio.remove();
-        }
-    }
-
+    
     // Quitar imagen trasera
     if (event.target.id === 'removeBackImage') {
         var card = event.target.closest('.card');
@@ -1258,14 +1824,6 @@ document.addEventListener('click', function(event) {
         }
     }
 
-    // Quitar audio trasero
-    if (event.target.id === 'removeBackAudio') {
-        var card = event.target.closest('.card');
-        var backAudio = card.querySelector('.back audio');
-        if (backAudio) {
-            backAudio.remove();
-        }
-    }
 });
 
 // --> Actualizar despues de remover Media Working
@@ -1276,9 +1834,7 @@ function updateCardDisplay() {
     // Actualizar la imagen frontal y trasera en la interfaz
     const frontImageElement = document.querySelector('.card-front img');
     const backImageElement = document.querySelector('.card-back img');
-    const frontAudioElement = document.querySelector('.card-front audio');
-    const backAudioElement = document.querySelector('.card-back audio');
-
+    
     if (frontImageElement) {
         frontImageElement.src = currentCard.frontImage || '';
         if (!currentCard.frontImage) frontImageElement.remove();
@@ -1289,19 +1845,9 @@ function updateCardDisplay() {
         if (!currentCard.backImage) backImageElement.remove();
     }
 
-    if (frontAudioElement) {
-        frontAudioElement.src = currentCard.frontAudio || '';
-        if (!currentCard.frontAudio) frontAudioElement.remove();
-    }
-
-    if (backAudioElement) {
-        backAudioElement.src = currentCard.backAudio || '';
-        if (!currentCard.backAudio) backAudioElement.remove();
-    }
-
+    
     // Si es necesario, puedes agregar más código para refrescar otros elementos de la tarjeta
 }        
-
 
 // --> Borrar Tarjeta Working
 
@@ -1318,7 +1864,25 @@ function updateCardDisplay() {
     }
 
 
+
+
+
 // --> Funcion de Sortear y Renombrar Categorias Working
+
+
+
+
+
+// Evento que se ejecuta cuando el DOM está completamente cargado
+document.addEventListener('DOMContentLoaded', function() {
+  loadFlashcardStacks();
+  updateCategories();
+  if (Object.keys(flashcardStacks).length > 0) {
+    currentStack = Object.keys(flashcardStacks)[0];
+  }
+  updateMiniatures();
+  updateCard();
+});
 
 function updateCategories() {
   categoriesContainer.innerHTML = '';
@@ -1336,22 +1900,28 @@ function updateCategories() {
     // Hacer la categoría editable con doble clic
     const categoryNameElement = category.querySelector('.category-name');
     categoryNameElement.ondblclick = function () {
+      isEditingCategoryName = true;
+      console.log('Iniciando edición de categoría');  // Log para depuración
       const input = document.createElement('input');
       input.type = 'text';
       input.value = stackName;
       input.className = 'edit-category-input';
       categoryNameElement.innerHTML = '';
       categoryNameElement.appendChild(input);
-      input.focus();
       input.select();
-      
+
       input.onblur = function () {
+        isEditingCategoryName = false;
+        console.log('Finalizando edición de categoría');  // Log para depuración
         saveNewCategoryName(stackName, input.value);
       };
       input.onkeydown = function (e) {
         if (e.key === 'Enter') {
+          isEditingCategoryName = false;
+          console.log('Finalizando edición de categoría (Enter)');  // Log para depuración
           saveNewCategoryName(stackName, input.value);
         }
+        e.stopPropagation();  // Evitar que el evento se propague
       };
     };
 
@@ -1381,6 +1951,7 @@ function updateCategories() {
         reorderedStacks[stackName] = flashcardStacks[stackName];
       });
       flashcardStacks = reorderedStacks;
+      saveToLocalStorage(); // Guardar cambios en el orden
     }
   });
 }
@@ -1391,6 +1962,7 @@ function saveNewCategoryName(oldName, newName) {
       flashcardStacks[newName] = flashcardStacks[oldName];
       delete flashcardStacks[oldName];
       updateCategories();
+      saveToLocalStorage(); // Guardar cambios en el nombre
     } else {
       alert('Category name already exists.');
     }
@@ -1399,14 +1971,105 @@ function saveNewCategoryName(oldName, newName) {
   }
 }
 
+function saveToLocalStorage() {
+  // Guardar los datos en el almacenamiento local
+  localStorage.setItem('flashcardStacks', JSON.stringify(flashcardStacks));
+  console.log('Changes saved to localStorage'); // Log para depuración
+
+  // Mostrar notificación de guardado en el almacenamiento local
+  const notification = document.createElement('div');
+  notification.className = 'SaveCategorienotification';
+  notification.textContent = 'Changes Saved!';
+  document.body.appendChild(notification);
+  
+  // Mostrar la notificación con animación
+  requestAnimationFrame(() => {
+    notification.style.opacity = '1';
+  });
+
+  // Ocultar la notificación después de 2 segundos
+  setTimeout(() => {
+    notification.style.opacity = '0';
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 2000); // Asegura que la notificación se elimine después de la animación
+  }, 2000);
+}
+
+
+
+
+
+
+
+
+// Nuevo evento para manejar la navegación por teclado
+
+document.addEventListener('keydown', function(e) {
+  console.log('Tecla presionada:', e.key, 'isEditingCategoryName:', isEditingCategoryName);  // Log para depuración
+  if (!isEditingCategoryName) {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();  // Prevenir el comportamiento predeterminado
+      nextCard();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();  // Prevenir el comportamiento predeterminado
+      previousCard();
+    }
+  }
+});
+
+
+// --> New Card Modal Working
+
+function openNewCardModal() {
+   editFrontTitleInput.value = '';
+   editBackTitleInput.value = '';
+   editFrontTextInput.value = '';
+   editBackTextInput.value = '';
+   editFrontImageInput.value = '';
+   editBackImageInput.value = '';
+   selectedColor = '#FFFFFF';
+   frontTitleFontSelect.value = 'Raleway';
+   frontTextFontSelect.value = 'Montserrat';
+   backTitleFontSelect.value = 'Raleway';
+   backTextFontSelect.value = 'Montserrat';
+   currentCardIndex = flashcardStacks[currentStack] ? flashcardStacks[currentStack].length : 0;
+   editCardTitle.textContent = "New Card";
+   editCardModal.style.display = 'block';
+   isModalOpen = true; // Establecer a true cuando se abre el modal
+}
+
+function closeNewCardModal() {
+   editCardModal.style.display = 'none';
+   isModalOpen = false; // Establecer a false cuando se cierra el modal
+}
+
+closeModal.addEventListener('click', closeNewCardModal);
+
+saveEditBtn.addEventListener('click', () => {
+   saveEditedCard();
+   closeNewCardModal(); // Asegurarse de que isModalOpen se establezca a false al guardar
+});
+
+window.onclick = function(event) {
+   if (event.target == editCardModal) {
+      closeNewCardModal();
+   }
+};
+
+
+
+
+
+
 // --> Edit modal Working 
 
 // Variable global para controlar si el modal está abierto
 let isModalOpen = false;
 
 function openEditModal(index) {
-  currentCardIndex = index;
-  const currentCard = flashcardStacks[currentStack][currentCardIndex];
+      currentCardIndex = index;
+      const currentCard = flashcardStacks[currentStack][currentCardIndex];
       editFrontTitleInput.value = currentCard.frontTitle;
       editBackTitleInput.value = currentCard.backTitle;
       editFrontTextInput.value = currentCard.frontText;
@@ -1418,7 +2081,7 @@ function openEditModal(index) {
       backTextFontSelect.value = currentCard.backTextFont;
       editCardTitle.textContent = "Edit Card";
       editCardModal.style.display = 'block';
-
+      
           // Conectar los botones de remover imagen y audio
     document.getElementById('removeFrontImage').onclick = function() {
         currentCard.frontImage = ''; // Remover imagen frontal
@@ -1430,28 +2093,78 @@ function openEditModal(index) {
         updateCardDisplay(); // Actualizar la tarjeta en el display
     };
 
-    document.getElementById('removeFrontAudio').onclick = function() {
-        currentCard.frontAudio = ''; // Remover audio frontal
-        updateCardDisplay(); // Actualizar la tarjeta en el display
-    };
-
-    document.getElementById('removeBackAudio').onclick = function() {
-        currentCard.backAudio = ''; // Remover audio trasero
-        updateCardDisplay(); // Actualizar la tarjeta en el display
-    };
-    
+        
     isModalOpen = true; // Establecer a true cuando se abre el modal
+    console.log('Modal opened'); // Diagnóstico
     }
+
+// --> Acordeon Working 
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+    const editCardModal = document.getElementById('editCardModal');
+
+    function resetAccordion() {
+        accordionHeaders.forEach(header => {
+            const content = header.nextElementSibling;
+            header.classList.remove('active');
+            content.classList.remove('active');
+            content.style.maxHeight = null;
+        });
+
+        // Abrir el primer panel por defecto
+        const firstAccordionHeader = accordionHeaders[0];
+        const firstAccordionContent = firstAccordionHeader.nextElementSibling;
+        firstAccordionHeader.classList.add('active');
+        firstAccordionContent.classList.add('active');
+        firstAccordionContent.style.maxHeight = firstAccordionContent.scrollHeight + "px";
+    }
+
+    accordionHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            // Cerrar todos los paneles excepto el que se clicó
+            accordionHeaders.forEach(h => {
+                if (h !== this) {
+                    h.classList.remove('active');
+                    const content = h.nextElementSibling;
+                    content.classList.remove('active');
+                    content.style.maxHeight = null;
+                }
+            });
+
+            // Abrir/cerrar el panel actual
+            this.classList.toggle('active');
+            const content = this.nextElementSibling;
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                content.style.maxHeight = null;
+            } else {
+                content.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    });
+
+    // Resetea el acordeón cada vez que se abre el modal
+    editCardModal.addEventListener('show.bs.modal', resetAccordion);
+});
+
+
+
+
+
+
 
 // --> Close Edit Modal
 
     function closeEditModal() {
   editCardModal.style.display = 'none';
   isModalOpen = false; // Establecer a false cuando se cierra el modal
+  console.log('Modal closed'); // Diagnóstico
 }
 
 closeModal.addEventListener('click', closeEditModal);
-
 saveEditBtn.addEventListener('click', () => {
   saveEditedCard();
   closeEditModal(); // Asegurarse de que isModalOpen se establezca a false al guardar
@@ -1462,6 +2175,11 @@ window.onclick = function(event) {
     closeEditModal();
   }
 };
+
+
+
+
+
 
 // --> Navegacion Por Teclado y Flip Animation Working
 
@@ -1491,7 +2209,8 @@ nextBtn.addEventListener('click', () => {
 });
 
 
-// Manejar la navegación y el flip con el teclado
+// ---> Manejar la navegación y el flip con el teclado
+
 document.addEventListener('keydown', (event) => {
   if (isModalOpen) return; // Si el modal está abierto, no hacer nada
   if (event.key === 'ArrowLeft') {
@@ -1510,9 +2229,11 @@ flashcardElement.addEventListener('click', () => {
     flashcardElement.classList.toggle('flipped');
   }
 });
-// --> Color for every card Working
 
-    colorOptions.forEach(option => {
+// --> Color Selection
+
+ 
+  colorOptions.forEach(option => {
       option.addEventListener('click', (e) => {
         selectedColor = e.target.getAttribute('data-color');
         document.querySelector('.flashcard-front').style.backgroundColor = selectedColor;
@@ -1547,7 +2268,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// --> New, Save, Remove, Export Import Working
+// --> New, Save, Remove, Export, Import Working
 
     newStackBtn.addEventListener('click', () => {
       const stackName = prompt("Enter a name for the new stack:");
