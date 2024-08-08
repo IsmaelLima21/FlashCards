@@ -64,6 +64,14 @@
   h2 {
     font-size: 20px;
   }
+
+h3 {
+    font-size: 14px;
+    margin-left: 8px;
+    margin-bottom: -1px; 
+    font-weight: bold;
+  }
+
   .categories {
     margin-bottom: 10px;
     height: 160px;
@@ -112,7 +120,7 @@
   }
   .flashcard {
     width: 420px;
-    height: 740px;
+    height: 85%;
     perspective: 1000px;
     cursor: pointer;
   }
@@ -147,9 +155,13 @@
     transform: rotateY(180deg);
   }
   .flashcard-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: normal;
+    text-align: left;
+    margin-bottom: 2px;
+    margin-top: -5px;
+    margin-left: 10px;
+    color: #666;
   }
   .flashcard-description {
     font-size: 16px;
@@ -795,17 +807,6 @@
 }
 */
 
-.ql-snow .ql-picker.ql-font span[data-value="lato"]::before {
-    font-family: 'Lato', sans-serif;
-}
-
-.ql-snow .ql-picker.ql-font span[data-value="montserrat"]::before {
-    font-family: 'Montserrat', sans-serif;
-}
-
-.ql-snow .ql-picker.ql-font span[data-value="raleway"]::before {
-    font-family: 'Raleway', sans-serif;
-}
 
 
 /* ----------NUEVO NEW------------*/
@@ -942,6 +943,7 @@
 <body>
   <div class="left-container" id="leftContainer">
     <h1>Categories</h1>
+	
     <div class="categories" id="categoriesContainer">
       <!-- Categories will be dynamically populated here -->
     </div>
@@ -965,25 +967,24 @@
 <!-- La tarjetita que quieres capturar -->
 
 <div class="flashcard" id="flashcard">
+<div class="flashcard-title" id="frontCardTitle">Flashcard Title</div>
     <div class="flashcard-inner">
-        <div class="flashcard-front">
-            <div class="flashcard-title" id="frontCardTitle">Flashcard Title</div>
-           
-            
-
-	   <div class="flashcard-description" id="frontText">This is a brief description or question for the flashcard. Tap to see the answer!</div>
+        <div class="flashcard-front">           
+ 
+	   <div class="flashcard-description" id="frontText" style="display: none">This is a brief description or question for the flashcard. Tap to see the answer!</div>
 
 	    <div class="card-text"></div> 	
 
             <img id="frontCardImage" class="card-image" src="" alt="" style="display: none; max-width: 100%; max-height: 50%;">
         </div>
         <!-- La parte de atrás de la tarjeta -->
+
         <div class="flashcard-back">
-          <div class="flashcard-title" id="backCardTitle">Answer Title</div>
+          <div class="flashcard-title" id="backCardTitle" style="display: none">Answer Title</div>
 
 	  <div class="card-text"></div> 
 
-          <div class="flashcard-description" id="backText"></div>
+          <div class="flashcard-description" id="backText" style="display: none"></div>
           <img id="backCardImage" class="card-image" src="" alt="" style="display: none; max-width: 100%; max-height: 50%;">
            </div>
       </div>
@@ -1084,13 +1085,13 @@
         			<option value="Courier New">Courier New</option>
         			<option value="Georgia">Georgia</option>
                         </select>
-			<input type="text" id="editFrontTitle" placeholder="Front Card Title" style="display: none">      
-                         
-
+			
+			<h3 id="editCardTitle">Miniature Title, example Card 1...</h3>  
+			<input type="text" id="editFrontTitle" placeholder="Miniature Title, example Card 1 ">
+			
 			<!-- Quill Editor for Front Side -->
 			
-			<div id="editFrontTextEditor" style="height: 200px;"></div> 
-
+			<div id="editFrontTextEditor" style="height: 220px;"></div> 
 
 			<select id="frontTextFont" style="display: none">
                                 <option value="Lato">Lato</option>
@@ -1128,7 +1129,7 @@
                         <input type="text" id="editBackTitle" placeholder="Back Card Title" style="display: none">
 
                         			<!-- Quill Editor for Back Side -->
-                        <div id="editBackTextEditor" style="height: 200px;"></div>
+                        <div id="editBackTextEditor" style="height: 220px;"></div>
 
 			<select id="backTextFont" style="display: none">
                             <option value="Lato">Lato</option>
@@ -1293,13 +1294,7 @@
   <script>
 // Default Cards
     let flashcardStacks = {
-      default: [
-        { frontTitle: "Geography", backTitle: "Answer", frontText: "What is the capital of France?", backText: "Paris", color: "#FFB3BA", frontTitleFont: "Raleway", frontTextFont: "Montserrat", backTitleFont: "Raleway", backTextFont: "Montserrat" },
-        { frontTitle: "Literature", backTitle: "Answer", frontText: "Who wrote 'Romeo and Juliet'?", backText: "William Shakespeare", color: "#BAFFC9", frontTitleFont: "Raleway", frontTextFont: "Montserrat", backTitleFont: "Raleway", backTextFont: "Montserrat" },
-        { frontTitle: "Chemistry", backTitle: "Answer", frontText: "What is the chemical symbol for gold?", backText: "Au", color: "#BAE1FF", frontTitleFont: "Raleway", frontTextFont: "Montserrat", backTitleFont: "Raleway", backTextFont: "Montserrat" },
-        { frontTitle: "History", backTitle: "Answer", frontText: "In which year did World War II end?", backText: "1945", color: "#FFFFBA", frontTitleFont: "Raleway", frontTextFont: "Montserrat", backTitleFont: "Raleway", backTextFont: "Montserrat" },
-        { frontTitle: "Astronomy", backTitle: "Answer", frontText: "What is the largest planet in our solar system?", backText: "Jupiter", color: "#FFDFBA", frontTitleFont: "Raleway", frontTextFont: "Montserrat", backTitleFont: "Raleway", backTextFont: "Montserrat" }
-      ]
+      default: [{"frontTitle":"Card 1","backTitle":"","frontText":"","backText":"","qfrontText":"<h1 class=\"ql-align-center\">¿Qué son las tarjetas de memoria?</h1><p><br></p><p class=\"ql-align-justify\">Las tarjetas de memoria son herramientas educativas que ayudan en la retención de información mediante preguntas y respuestas. Son ideales para estudiantes y profesionales que desean mejorar su memoria y habilidades de estudio.</p><p><br></p>","qbackText":"<h1 class=\"ql-align-center\">Beneficios de usarlas</h1><p class=\"ql-align-center\"><br></p><ul><li>Mejoran la memoria a largo plazo</li><li>Facilitan el aprendizaje activo</li><li>Pueden ser usadas en cualquier lugar</li></ul><p><br></p>","color":"#FFFFFF","frontTitleFont":"Raleway","frontTextFont":"Montserrat","backTitleFont":"Raleway","backTextFont":"Montserrat"},{"frontTitle":"Card 2","backTitle":"","frontText":"","backText":"","qfrontText":"<h1 class=\"ql-align-center\">¿Cómo funcionan?</h1><p class=\"ql-align-justify\">Las tarjetas de memoria presentan una pregunta en un lado y la respuesta en el otro, permitiendo al usuario practicar y autoevaluarse.</p><p><br></p>","qbackText":"<h1 class=\"ql-align-center\">Estrategias para usarlas</h1><ul><li>Repetición espaciada</li><li>Practicar en intervalos regulares</li><li>Usarlas en diferentes momentos del día</li></ul><p><br></p>","color":"#FF8080","frontTitleFont":"Raleway","frontTextFont":"Montserrat","backTitleFont":"Raleway","backTextFont":"Montserrat"},{"frontTitle":"Card 3","backTitle":"","frontText":"","backText":"","qfrontText":"<h1>Ventajas de las tarjetas</h1><ul><li>Portátiles y fáciles de usar</li><li>Adaptables a cualquier tema</li><li>Permiten un aprendizaje interactivo</li></ul><p><br></p>","qbackText":"<h1 class=\"ql-align-center\">Variedad de formatos</h1><p class=\"ql-align-justify\">Las tarjetas de memoria pueden ser físicas o digitales, cada una con sus propios beneficios y funcionalidades.</p><p><br></p>","color":"#FFBA80","frontTitleFont":"Raleway","frontTextFont":"Montserrat","backTitleFont":"Raleway","backTextFont":"Montserrat"},{"frontTitle":"Card 4","backTitle":"","frontText":"","backText":"","qfrontText":"<h1 class=\"ql-align-center\">¿Para quién son útiles?</h1><p class=\"ql-align-justify\">Son útiles para estudiantes, profesionales, y cualquier persona que necesite memorizar información, como fechas, vocabulario, o fórmulas matemáticas.</p><p><br></p>","qbackText":"<h1 class=\"ql-align-center\">Aplicaciones prácticas</h1><ul><li>Preparación para exámenes</li><li>Aprender un nuevo idioma</li><li>Recordar hechos históricos</li></ul><p><br></p>","color":"#FF80EB","frontTitleFont":"Raleway","frontTextFont":"Montserrat","backTitleFont":"Raleway","backTextFont":"Montserrat"},{"frontTitle":"Card 5","backTitle":"","frontText":"","backText":"","qfrontText":"<h1 class=\"ql-align-center\">Personalización de tarjetas</h1><p class=\"ql-align-justify\">Las tarjetas de memoria se pueden personalizar para adaptarse a tus necesidades específicas de estudio. Puedes agregar imágenes, textos, y mucho más.</p><p><br></p>","qbackText":"<h1 class=\"ql-align-center\">Diseños únicos</h1><p class=\"ql-align-justify\">Crea tarjetas que se adapten a tu estilo de aprendizaje. ¡Haz que el estudio sea divertido y efectivo!</p><p><br></p>","color":"#FFF280","frontTitleFont":"Raleway","frontTextFont":"Montserrat","backTitleFont":"Raleway","backTextFont":"Montserrat"},{"frontTitle":"Card 6","backTitle":"","frontText":"","backText":"","qfrontText":"<h1 class=\"ql-align-center\">Versatilidad</h1><p><br></p><p class=\"ql-align-justify\">Usa tarjetas de memoria para cualquier tema, desde ciencias hasta literatura. Su flexibilidad las hace ideales para cualquier campo de estudio.</p><p><br></p>","qbackText":"<h1 class=\"ql-align-center\">Mejora constante</h1><p class=\"ql-align-center\"><br></p><p>A medida que avanzas en tus estudios, actualiza y mejora tus tarjetas de memoria para seguir el ritmo de tu aprendizaje.</p>","color":"#BFEA80","frontTitleFont":"Raleway","frontTextFont":"Montserrat","backTitleFont":"Raleway","backTextFont":"Montserrat"},{"frontTitle":"Card 7","backTitle":"","frontText":"","backText":"","qfrontText":"<h1 class=\"ql-align-center\">Formato</h1><p class=\"ql-align-center\"><br></p><p><strong>Puedes usar texto en negrita,</strong> </p><p><em>texto en cursiva, </em></p><p><span style=\"background-color: rgb(255, 255, 0);\">texto resaltado</span><em>, </em></p><p><strong style=\"color: rgb(153, 51, 255); font-size: 14px;\">texto de color</strong><em>,</em> </p><p><span class=\"ql-font-sofia\">texto con diferente tipo de fuente</span></p><p>para destacar partes importantes. </p><p><br></p>","qbackText":"<h1>Opciones de alineación</h1><p class=\"ql-align-center\"><br></p><h2 class=\"ql-align-center\"><span style=\"font-size: 14px;\">Este texto está centrado.</span></h2><p>Este texto está alineado a la izquierda.</p><p class=\"ql-align-center\">Este texto está alineado</p><p><br></p><p><br></p>","color":"#99C5FF","frontTitleFont":"Raleway","frontTextFont":"Montserrat","backTitleFont":"Raleway","backTextFont":"Montserrat"},{"frontTitle":"Card 8","backTitle":"","frontText":"","backText":"","qfrontText":"<h1 class=\"ql-align-center\">Listas ordenadas</h1><ol><li>Primer ítem</li><li>Segundo ítem</li><li>Tercer ítem</li></ol><p><br></p>","qbackText":"<h1 class=\"ql-align-center\">Listas desordenadas</h1><ul><li>Primer ítem</li><li>Segundo ítem</li><li>Tercer ítem</li></ul><p><br></p>","color":"#99F299","frontTitleFont":"Raleway","frontTextFont":"Montserrat","backTitleFont":"Raleway","backTextFont":"Montserrat"},{"frontTitle":"Card 9","backTitle":"","qfrontText":"<h1 class=\"ql-align-center ql-font-raleway\">Bloques de código</h1><pre class=\"ql-syntax\" spellcheck=\"false\">console.log('Hola, Mundo!');\n</pre><p class=\"ql-align-justify ql-font-montserrat\">Puedes incluir bloques de código en tus tarjetas para ayudar a estudiar programación.</p>","qbackText":"<h1 class=\"ql-align-center ql-font-raleway\">Citas</h1><blockquote class=\"ql-font-montserrat\">Esta es una cita destacada. Es útil para resaltar información importante o frases célebres.</blockquote>","color":"#C080FF","frontTitleFont":"Raleway","frontTextFont":"Montserrat","backTitleFont":"Raleway","backTextFont":"Montserrat","frontText":"undefined","backText":"undefined"},{"frontTitle":"Card 10","backTitle":"","qfrontText":"<h1 class=\"ql-align-center ql-font-raleway\">Imágenes</h1><p class=\"ql-font-montserrat ql-align-justify\"><br></p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify ql-font-montserrat\">Puedes insertar imágenes en tus tarjetas para enriquecer el contenido visual. Esto es ideal para tarjetas de memoria sobre arte, biología, o cualquier tema visual.</p>","qbackText":"<p><br></p><h1 class=\"ql-align-center\">Videos</h1><p class=\"ql-font-montserrat ql-align-center\"><br></p><iframe class=\"ql-video ql-align-center\" frameborder=\"0\" allowfullscreen=\"true\" src=\"https://www.youtube.com/embed/gtoMGoCtPNA?showinfo=0\"></iframe><p class=\"ql-font-montserrat ql-align-center\"><br></p><p class=\"ql-font-montserrat ql-align-center\"><br></p><p class=\"ql-align-justify ql-font-montserrat\">Puedes agregar enlaces a videos o incrustar videos directamente en tus tarjetas para una experiencia de aprendizaje más completa.</p><p class=\"ql-align-justify ql-font-montserrat\"><br></p>","color":"#FAFAFA","frontTitleFont":"Raleway","frontTextFont":"Montserrat","backTitleFont":"Raleway","backTextFont":"Montserrat","frontText":"undefined","backText":"undefined"}]
     };
 
     let currentStack = 'default';
